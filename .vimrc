@@ -1,6 +1,6 @@
 set nocompatible " 关闭 vi 兼容模式
 syntax on " 自动语法高亮
-" colorscheme molokai " 设定配色方案
+colorscheme evening " 设定配色方案
 set number " 显示行号
 set cursorline " 突出显示当前行
 set ruler " 打开状态栏标尺
@@ -38,3 +38,7 @@ setlocal foldlevel=1 " 设置折叠层数为
 " set foldclose=all " 设置为自动关闭折叠 
 " nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 " 用空格键来开关折叠
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Auto_Open=1
