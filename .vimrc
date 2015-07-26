@@ -38,7 +38,24 @@ setlocal foldlevel=1 " 设置折叠层数为
 " set foldclose=all " 设置为自动关闭折叠 
 " nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 " 用空格键来开关折叠
+" Ctags
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+" Taglist
 let Tlist_Show_One_File=1
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Auto_Open=1
+" OmniCppComplete
+set nocp
+filetype plugin on
+set completeopt=menu,longest,menuone
+let OmniCpp_NamespaceSearch = 2
+let OmniCpp_GlobalScopeSearch = 1
+let OmniCpp_ShowAccess = 1
+let OmniCpp_ShowPrototypeInAbbr = 1 
+let OmniCpp_MayCompleteDot = 1   
+let OmniCpp_MayCompleteArrow = 1 
+let OmniCpp_MayCompleteScope = 1 
+let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+let OmniCpp_SelectFirstItem = 2
+let OmniCpp_DisplayMode=1
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
