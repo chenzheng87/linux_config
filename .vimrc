@@ -41,6 +41,8 @@ setlocal foldlevel=1 " 设置折叠层数为
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " Ctags
 """""""""""""""""""""""""""""""""""""""""""""""""""
+let tags_file=finddir("tags",".;")
+exe "set tags=" tags_file
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " Cscope
@@ -51,9 +53,15 @@ if has("cscope")
 	set cst
 	set nocsverb
 	" add any database in current directory
-	" if filereadable("cscope.out")
-	"     cs add cscope.out
-	" endif
+	if filereadable("cscope.out")
+	    cs add cscope.out
+	else
+		let cscope_file=findfile("cscope.out",".;")  
+		let cscope_pre=matchstr(cscope_file,".*/")  
+		if !empty(cscope_file) && filereadable(cscope_file)  
+			exe "cs add" cscope_file cscope_pre  
+		endif 
+	endif
 	set csverb
 endif
 """""""""""""""""""""""""""""""""""""""""""""""""""
