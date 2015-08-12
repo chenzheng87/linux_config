@@ -41,8 +41,10 @@ setlocal foldlevel=1 " 设置折叠层数为
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " Ctags
 """""""""""""""""""""""""""""""""""""""""""""""""""
-let tags_file=finddir("tags",".;")
-exe "set tags=" tags_file
+let ctags_file_path=findfile("tags",".;")
+if !empty(ctags_file_path)
+	exe "set tags=".ctags_file_path
+endif
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " Cscope
