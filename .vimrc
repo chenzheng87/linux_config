@@ -1,15 +1,15 @@
-set nocompatible " 关闭 vi 兼容模式
-syntax on " 自动语法高亮
-colorscheme evening " 设定配色方案
-set number " 显示行号
-set cursorline " 突出显示当前行
-set ruler " 打开状态栏标尺
-set shiftwidth=4 " 设定 << 和 >> 命令移动时的宽度为 4
-set softtabstop=4 " 使得按退格键时可以一次删掉 4 个空格
-set tabstop=4 " 设定 tab 长度为 4
-set nobackup " 覆盖文件时不备份
-set autochdir " 自动切换当前目录为当前文件所在的目录
-filetype plugin indent on " 开启插件
+set nocompatible "不兼容模式
+syntax enable "语法高亮
+"colorscheme evening "设置配色方案
+set number "显示行号
+set cursorline "突出显示当前行
+set ruler "打开状态栏标尺
+set shiftwidth=4 "设定 << 和 >> 命令移动时的宽度为 4
+set softtabstop=4 "退格键一次删除4个空格
+set tabstop=4 "tab宽度设置为4
+set nobackup "覆盖时不保存副本
+set autochdir "自动切换当前目录为当前文件所在的目录
+set guifont=monaco\ 14
 set backupcopy=yes " 设置备份时的行为为覆盖
 set ignorecase smartcase " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
 set nowrapscan " 禁止在搜索到文件两端时重新搜索
@@ -22,32 +22,31 @@ set t_vb= " 置空错误铃声的终端代码
 " set matchtime=2 " 短暂跳转到匹配括号的时间
 set magic " 设置魔术
 set hidden " 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
-set guioptions-=T " 隐藏工具栏
-set guioptions-=m " 隐藏菜单栏
 set smartindent " 开启新行时使用智能自动缩进
 set backspace=indent,eol,start
-" 不设定在插入状态无法用退格键和 Delete 键删除回车符
-set cmdheight=1 " 设定命令行的行数为 1
+" 不设定在插入状态无法用退格键和 delete 键删除回车符
+"set cmdheight=1 " 设定命令行的行数为 1
 set laststatus=2 " 显示状态栏 (默认值为 1, 无法显示状态栏)
-set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)\ 
-" 设置在状态行显示的信息
-set foldenable " 开始折叠
-set foldmethod=syntax " 设置语法折叠
-set foldcolumn=0 " 设置折叠区域的宽度
-setlocal foldlevel=1 " 设置折叠层数为
-" set foldclose=all " 设置为自动关闭折叠 
-" nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
-" 用空格键来开关折叠
+set statusline=\ %<%f[%1*%m%*%n%r%h]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%l%)\ 
+"设置在状态行显示的信息
+set foldenable "开始折叠
+set foldmethod=syntax "设置语法折叠
+set foldcolumn=0 "设置折叠区域的宽度
+setlocal foldlevel=1 "设置折叠层数为
+"set guioptions-=t " 隐藏工具栏
+"set guioptions-=m " 隐藏菜单栏
+"set foldclose=all "设置为自动关闭折叠 
+"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<cr> " 用空格键来开关折叠
 """""""""""""""""""""""""""""""""""""""""""""""""""
-" Ctags
+"ctags
 """""""""""""""""""""""""""""""""""""""""""""""""""
 let ctags_file_path=findfile("tags",".;")
 if !empty(ctags_file_path)
 	exe "set tags=".ctags_file_path
 endif
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+map <c-f12> :!ctags -r --c++-kinds=+p --fields=+ias --extra=+q .<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""
-" Cscope
+"cscope
 """""""""""""""""""""""""""""""""""""""""""""""""""
 if has("cscope")
 	set csprg=/usr/bin/cscope
@@ -67,25 +66,69 @@ if has("cscope")
 	set csverb
 endif
 """""""""""""""""""""""""""""""""""""""""""""""""""
+" vundle
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Bundle 'vundle'
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+Bundle 'ack.vim'
+Bundle 'taglist.vim'
+Bundle 'Command-T'
+Bundle 'https://github.com/lokaltog/vim-powerline.git'
+Bundle 'molokai'
+Bundle 'YouCompleteMe'
+
+let g:powline_symbols='fancy'
+call vundle#end()
+filetype plugin indent on
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"vim-powerline
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+set t_Co=256
+let g:Powerline_symbols='unicode'
+set encoding=utf8
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"set color scheme after vim-powerline
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+set background=dark
+colorscheme molokai "设置配色方案
+let g:molokai_original = 1
+"""""""""""""""""""""""""""""""""""""""""""""""""""
 " Taglist
 """""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>tl :Tlist<CR>
 let Tlist_Show_One_File=1
 let Tlist_Exit_OnlyWindow=1
-let Tlist_Auto_Open=1
+let Tlist_Use_Right_Window = 1
+let Tlist_WinWidth=25
+let Tlist_File_Fold_Auto_Close = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""
-" OmniCppComplete
+" pathogen
 """""""""""""""""""""""""""""""""""""""""""""""""""
-set nocp
-filetype plugin on
-set completeopt=menu,longest,menuone
-let OmniCpp_NamespaceSearch = 2
-let OmniCpp_GlobalScopeSearch = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 
-let OmniCpp_MayCompleteDot = 1   
-let OmniCpp_MayCompleteArrow = 1 
-let OmniCpp_MayCompleteScope = 1 
-let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-let OmniCpp_SelectFirstItem = 2
-let OmniCpp_DisplayMode=1
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+call pathogen#infect()
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" YouCompleteMe
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"let g:loaded_youcompleteme=1
+let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+let g:ycm_global_ycm_extra_conf='/home/chenzheng/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" GVIM 
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+if has("gui_running")
+	set guioptions+=c        " 使用字符提示框
+	set guioptions-=m        " 隐藏菜单栏
+	set guioptions-=T        " 隐藏工具栏
+    set guioptions-=L        " 隐藏左侧滚动条
+	set guioptions-=r        " 隐藏右侧滚动条
+	set guioptions-=b        " 隐藏底部滚动条
+	set showtabline=0		 " 隐藏Tab栏
+	set cursorline           " 突出显示当前行
+endif
