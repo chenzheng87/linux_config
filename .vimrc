@@ -214,7 +214,15 @@ let Tlist_File_Fold_Auto_Close = 1
 "YouCompleteMe
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "let g:loaded_youcompleteme=1
-set completeopt-=preview "补全内容不以分割子窗口形式出现，只显示补全列表
+"set completeopt=longest,menu  "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
+"autocmd InsertLeave * if pumvisible() == 0|pclose|endif	 "离开插入模式后自动关闭预览窗口
+inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>" "回车即选中当前项
+"上下左右键的行为 会显示其他信息
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
+"set completeopt-=preview "补全内容不以分割子窗口形式出现，只显示补全列表
 let g:ycm_min_num_of_chars_for_completion=1 "从第一个键入字符就开始罗列匹配项
 let g:ycm_cache_omnifunc=0 "禁止缓存匹配项，每次都重新生成匹配项
 let g:ycm_seed_identifiers_with_syntax=1 "语法关键字补全
