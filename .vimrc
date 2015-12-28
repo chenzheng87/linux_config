@@ -1,12 +1,12 @@
 set nocompatible "不兼容模式
 syntax enable "语法高亮
-"colorscheme evening "设置配色方案
 set number "显示行号
 set cursorline "突出显示当前行
 set ruler "打开状态栏标尺
 set shiftwidth=3 "设定 << 和 >> 命令移动时的宽度为 4
 set softtabstop=3 "退格键一次删除4个空格
 set tabstop=4 "tab宽度设置为4
+"补全内容不以分割子窗口形式出现，只显示补全列表
 set nobackup "覆盖时不保存副本
 set autochdir "自动切换当前目录为当前文件所在的目录
 set guifont=monaco\ 14
@@ -73,15 +73,31 @@ set rtp+=~/.vim/bundle/vundle
 call vundle#begin()
 
 Bundle 'gmarik/vundle'
+Bundle 'pathogen.vim'
+
 Bundle 'L9'
 Bundle 'FuzzyFinder'
-Bundle 'ack.vim'
-Bundle 'taglist.vim'
 Bundle 'Command-T'
-"状态栏颜色
+
+"搜索插件
+Bundle 'ack.vim'
+"常用两个插件
+Bundle 'cscope.vim'
+Bundle 'taglist.vim'
+"状态栏美化
 Bundle 'lokaltog/vim-powerline'
+"括号匹配高亮
+Bundle 'kien/rainbow_parentheses.vim'
+"快速移动
+Bundle 'Lokaltog/vim-easymotion'
+"自动括号补全
+Bundle 'Raimondi/delimitMate'
+"代码对齐
+Bundle 'godlygeek/tabular'
 "批量注释
 Bundle 'scrooloose/nerdcommenter'
+"静态代码分析
+Bundle 'scrooloose/syntastic'
 "目录树导航
 Bundle 'scrooloose/nerdtree'
 "标签导航
@@ -96,6 +112,14 @@ Bundle 'tdcdev/ycm_simple_conf'
 let g:powline_symbols='fancy'
 call vundle#end()
 filetype plugin indent on
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"pathogen
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+call pathogen#infect()
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"ack
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ackprg = 'ag --nogroup --nocolor --column'
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "vim-powerline
 """""""""""""""""""""""""""""""""""""""""""""""""""
@@ -116,16 +140,67 @@ let g:molokai_original = 1
 "Nerd-tree
 """""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <leader>nt :NERDTree<CR>
+let g:NERDTreeWinSize=20
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$', '^\.svn$', '^\.hg$' ]
 let g:netrw_home='~/bak'
 "close vim if the only window left open is a NERDTree
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && ("b:NERDTreeType == "primary") | q | end
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "Tagbar
 """""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <leader>tb :TagbarToggle<CR> 
-let g:tagbar_autofocus = 1
+let g:tagbar_width=20
+let g:tagbar_autofocus=1
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"rainbow_parentheses
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+let g:rbpt_max = 40
+let g:rbpt_loadcmd_toggle = 0
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"delimitMate
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+au FileType python let b:delimitMate_nesting_quotes = ['"']
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"tabular
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>bb :Tab /=<CR> "按=号对齐代码
+nmap <leader>bn :Tab /=<CR> "自定义对齐
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"Taglist
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:syntastic_error_symbol = '✗'	"set error or warning signs
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_highlighting = 0
+"let g:syntastic_python_checker="flake8,pyflakes,pep8,pylint"
+"let g:syntastic_python_checkers=['pyflakes']
+""highlight SyntasticErrorSign guifg=white guibg=black
+
+let g:syntastic_cpp_include_dirs = ['/usr/include/']
+let g:syntastic_cpp_remove_include_errors = 1
+let g:syntastic_cpp_check_header = 1
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
+let g:syntastic_enable_balloons = 1	"whether to show balloons
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "Taglist
 """""""""""""""""""""""""""""""""""""""""""""""""""
@@ -133,22 +208,24 @@ nmap <leader>tl :Tlist<CR>
 let Tlist_Show_One_File=1
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Use_Right_Window = 1
-let Tlist_WinWidth=25
+let Tlist_WinWidth=20
 let Tlist_File_Fold_Auto_Close = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""
-" pathogen
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-call pathogen#infect()
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-" YouCompleteMe
+"YouCompleteMe
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "let g:loaded_youcompleteme=1
+set completeopt-=preview "补全内容不以分割子窗口形式出现，只显示补全列表
+let g:ycm_min_num_of_chars_for_completion=1 "从第一个键入字符就开始罗列匹配项
+let g:ycm_cache_omnifunc=0 "禁止缓存匹配项，每次都重新生成匹配项
+let g:ycm_seed_identifiers_with_syntax=1 "语法关键字补全
+let g:ycm_error_symbol='>>'
+let g:ycm_warning_symbol='>*'
 let g:ycm_semantic_triggers={}
 let g:ycm_semantic_triggers.c=['->', '.', ' ', '(', '[', '&']
 let g:ycm_path_to_python_interpreter='/usr/bin/python'
 let g:ycm_global_ycm_extra_conf='/home/chenzheng/.vim/bTaglistundle/YouCompleteMe/.ycm_extra_conf.py'
-nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+"nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+"nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " GVIM 
