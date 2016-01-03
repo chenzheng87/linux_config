@@ -92,12 +92,14 @@ Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'Lokaltog/vim-easymotion'
 "自动括号补全
 Bundle 'Raimondi/delimitMate'
+"多文档编辑
+Bundle 'fholgado/minibufexpl.vim'
 "代码对齐
 Bundle 'godlygeek/tabular'
 "批量注释
 Bundle 'scrooloose/nerdcommenter'
 "静态代码分析
-Bundle 'scrooloose/syntastic'
+"Bundle 'scrooloose/syntastic'
 "目录树导航
 Bundle 'scrooloose/nerdtree'
 "标签导航
@@ -180,27 +182,41 @@ let g:rbpt_loadcmd_toggle = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""
 au FileType python let b:delimitMate_nesting_quotes = ['"']
 """""""""""""""""""""""""""""""""""""""""""""""""""
+"minibufexpl
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:miniBufExplMapWindowNavVim    = 1
+let g:miniBufExplMapWindowNavArrows = 1
+let g:miniBufExplMapCTabSwitchBufs  = 1
+let g:miniBufExplModSelTarget       = 1
+"解决FileExplorer窗口变小问题
+"let g:miniBufExplForceSyntaxEnable = 1
+"let g:miniBufExplorerMoreThanOne=2
+"let g:miniBufExplCycleArround=1
+"buffer 切换快捷键，默认方向键左右可以切换buffer
+map <C-Tab> :MBEbn<cr>
+map <C-S-Tab> :MBEbp<cr>
+"""""""""""""""""""""""""""""""""""""""""""""""""""
 "tabular
 """""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <leader>bb :Tab /=<CR> "按=号对齐代码
 nmap <leader>bn :Tab /=<CR> "自定义对齐
 """""""""""""""""""""""""""""""""""""""""""""""""""
-"Taglist
+"Syntastic
 """""""""""""""""""""""""""""""""""""""""""""""""""
-let g:syntastic_error_symbol = '✗'	"set error or warning signs
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_highlighting = 0
-"let g:syntastic_python_checker="flake8,pyflakes,pep8,pylint"
-"let g:syntastic_python_checkers=['pyflakes']
-""highlight SyntasticErrorSign guifg=white guibg=black
+"let g:syntastic_error_symbol = '✗'	"set error or warning signs
+"let g:syntastic_warning_symbol = '⚠'
+"let g:syntastic_check_on_open=1
+"let g:syntastic_enable_highlighting = 0
+""let g:syntastic_python_checker="flake8,pyflakes,pep8,pylint"
+""let g:syntastic_python_checkers=['pyflakes']
+"""highlight SyntasticErrorSign guifg=white guibg=black
 
-let g:syntastic_cpp_include_dirs = ['/usr/include/']
-let g:syntastic_cpp_remove_include_errors = 1
-let g:syntastic_cpp_check_header = 1
-let g:syntastic_cpp_compiler = 'clang++'
-let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
-let g:syntastic_enable_balloons = 1	"whether to show balloons
+"let g:syntastic_cpp_include_dirs = ['/usr/include/']
+"let g:syntastic_cpp_remove_include_errors = 1
+"let g:syntastic_cpp_check_header = 1
+"let g:syntastic_cpp_compiler = 'clang++'
+"let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
+"let g:syntastic_enable_balloons = 1	"whether to show balloons
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "Taglist
 """""""""""""""""""""""""""""""""""""""""""""""""""
@@ -227,14 +243,15 @@ let g:ycm_min_num_of_chars_for_completion=1 "从第一个键入字符就开始�
 let g:ycm_cache_omnifunc=0 "禁止缓存匹配项，每次都重新生成匹配项
 let g:ycm_seed_identifiers_with_syntax=1 "语法关键字补全
 let g:ycm_error_symbol='>>'
-let g:ycm_warning_symbol='>*'
+let g:ycm_warning_symbol='**'
 let g:ycm_semantic_triggers={}
 let g:ycm_semantic_triggers.c=['->', '.', ' ', '(', '[', '&']
 let g:ycm_path_to_python_interpreter='/usr/bin/python'
 let g:ycm_global_ycm_extra_conf='/home/chenzheng/.vim/bTaglistundle/YouCompleteMe/.ycm_extra_conf.py'
-"nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
-"nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"nnoremap <leader>gi :YcmCompleter GoToImprecise<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " GVIM 
 """""""""""""""""""""""""""""""""""""""""""""""""""
